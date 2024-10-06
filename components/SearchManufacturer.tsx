@@ -21,8 +21,8 @@ const SearchManufacturer = ({
         );
 
   return (
-    <div className="serch-manufacturer">
-      <Combobox>
+    <div className="search-manufacturer">
+      <Combobox value={manufacturer} onChange={setManufacturer}>
         <div className="relative w-full">
           <Combobox.Button className="absolute top-[14px]">
             <Image
@@ -48,26 +48,34 @@ const SearchManufacturer = ({
             afterLeave={() => setQuery("")}
           >
             <Combobox.Options>
-              {filteredManufacturers.length === 0 && query !== "" ? (
+              {filteredManufacturers.map((item) => (
                 <Combobox.Option
-                  value={query}
-                  className={"search-manufacturer__opiton"}
+                  key={item}
+                  className={({ active }) =>
+                    `relative search-manufacturer__opiton ${active ? `bg-primary-blue text-white` : `text-gray-900`}`
+                  }
+                  value={item}
                 >
-                  Create "{query}"
+                  {({ selected, active }) => (
+                    <>
+                      <span
+                        className={`block truncate ${
+                          selected ? "font-medium" : "font-normal"
+                        }`}
+                      >
+                        {item}
+                      </span>
+                      {selected ? (
+                        <span
+                          className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
+                            active ? "text-white" : "text-teal-600"
+                          }`}
+                        ></span>
+                      ) : null}
+                    </>
+                  )}
                 </Combobox.Option>
-              ) : (
-                filteredManufacturers.map((item) => (
-                  <Combobox.Option
-                    key={item}
-                    className={({ active }) =>
-                      `relative search-manufacturer__opiton ${active ? `bg-primary-blue text-white` : `text-gray-900`}`
-                    }
-                    value={item}
-                  >
-                    {item}
-                  </Combobox.Option>
-                ))
-              )}
+              ))}
             </Combobox.Options>
           </Transition>
         </div>
